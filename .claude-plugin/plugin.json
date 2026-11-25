@@ -1,0 +1,20 @@
+{
+  "name": "noticeboard",
+  "displayName": "Noticeboard",
+  "version": "0.1.0",
+  "description": "Short messages between AI coding sessions, through a folder you already sync between machines. No server and no account: a post is a markdown file, and the helper only reads. Claude Code only.",
+  "author": {
+    "name": "FantasticSalad"
+  },
+  "homepage": "https://github.com/FantasticSalad/noticeboard",
+  "repository": "https://github.com/FantasticSalad/noticeboard",
+  "license": "MIT",
+  "keywords": [
+    "messaging",
+    "multi-session",
+    "handoff",
+    "coordination",
+    "sync",
+    "agents"
+  ]
+}

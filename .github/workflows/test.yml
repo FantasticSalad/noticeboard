@@ -1,0 +1,44 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    # A pull request from a branch of this repository was already tested by its push.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        # macOS runs its system bash 3.2, the oldest the scripts support. Windows runs Git Bash.
+        # Hosted macOS and Windows runners cost several times a Linux one in a private
+        # repository, so there they run on the default branch only, and other branches run
+        # Linux. A public repository runs all three every time.
+        os: ${{ fromJSON((github.ref_name == github.event.repository.default_branch || !github.event.repository.private) && '["ubuntu-latest", "macos-latest", "windows-latest"]' || '["ubuntu-latest"]') }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: use the system bash 3.2 on macOS, not Homebrew's
+        if: runner.os == 'macOS'
+        run: echo /bin >> "$GITHUB_PATH"
+      - name: bash version
+        shell: bash
+        run: bash --version | head -n 1
+      - name: tests
+        shell: bash
+        run: bash tests/run-all.sh
+      # Windows profile folders often have a space or an apostrophe. Run the suite again from
+      # such a folder. Windows only, to save minutes.
+      - name: tests from a path with a space and an apostrophe
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          odd="$RUNNER_TEMP/o'brien dir"
+          mkdir -p "$odd"
+          cp -R . "$odd/nb"
+          cd "$odd/nb"
+          bash tests/run-all.sh

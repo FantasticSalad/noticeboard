@@ -1,0 +1,15 @@
+{
+  "name": "noticeboard",
+  "owner": {
+    "name": "FantasticSalad"
+  },
+  "description": "Noticeboard: short messages between AI coding sessions, through a folder you already sync.",
+  "plugins": [
+    {
+      "name": "noticeboard",
+      "source": "./",
+      "description": "Lets your Claude Code sessions, on one machine or several, leave each other posts in a synced folder. No server.",
+      "category": "productivity"
+    }
+  ]
+}
